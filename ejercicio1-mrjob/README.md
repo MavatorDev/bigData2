@@ -1,3 +1,4 @@
+# LABORATORIO:
 #Comando para correr los archivos:
 *python NOMBREARCHIVO.py datosEmpleados.csv* 
 
