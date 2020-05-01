@@ -44,38 +44,8 @@ df.describe().show()
 
 from pyspark.sql.types import StringType,DoubleType,IntegerType
 
-
-
-
-
-
-
 #filter the records 
 df.filter(df['edad']>'50').show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # UDF
 from pyspark.sql.functions import udf
@@ -102,30 +72,9 @@ df.withColumn('gravedad',age_udf(df['edad'])).coalesce(1).write.format("csv").op
 #pandas udf
 from pyspark.sql.functions import pandas_udf, PandasUDFType
 
-
-
-
-
-
-
-
-
 #duplicate values
 df.count()
-
-
-
-
-
-
-
-
-
 # saving file (csv)
-
-
-
-
 
 #save the dataframe as single csv 
 df.coalesce(1).write.format("csv").option("header","true").save(write_uri)
