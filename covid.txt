@@ -1,0 +1,149 @@
+%%configure -f
+{ "conf":{
+"spark.pyspark.python": "python3",
+"spark.pyspark.virtualenv.enabled": "true",
+"spark.pyspark.virtualenv.type":"native",
+"spark.pyspark.virtualenv.bin.path":"/usr/bin/virtualenv"
+}}
+sc
+
+
+
+#import SparkSession
+from pyspark.sql import SparkSession
+
+#create spar session object
+spark=SparkSession.builder.appName('data_processing').getOrCreate()
+
+# Load csv Dataset 
+df=spark.read.csv('s3://mavator/datasets/spark/Casos_positivos_de_COVID-19_en_Colombia.csv',inferSchema=True,header=True)
+
+#columns of dataframe
+df.columns
+
+#check number of columns
+len(df.columns)
+
+#number of records in dataframe
+df.count()
+
+#shape of dataset
+print((df.count(),len(df.columns)))
+
+#printSchema
+df.printSchema()
+
+#fisrt few rows of dataframe
+df.show(5)
+
+#select only 2 columns
+df.select('fecha diagnostico','fecha de muerte').show()
+
+#info about dataframe
+df.describe().show()
+
+from pyspark.sql.types import StringType,DoubleType,IntegerType
+
+
+
+
+
+
+
+#filter the records 
+df.filter(df['edad']>'50').show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# UDF
+from pyspark.sql.functions import udf
+
+
+#normal function 
+def gravedad(edad):
+    if edad > 60:
+        return 'grave'
+    else:
+        return 'normal'
+
+#create udf using python function
+age_udf=udf(gravedad)
+#apply udf on dataframe
+df.withColumn('gravedad',age_udf(df['edad'])).show(10,False)
+
+#target directory 
+write_uri='s3://mavator/datasets/spark/df3_csv'
+
+#save the dataframe as single csv 
+df.withColumn('gravedad',age_udf(df['edad'])).coalesce(1).write.format("csv").option("header","true").save(write_uri)
+
+#pandas udf
+from pyspark.sql.functions import pandas_udf, PandasUDFType
+
+
+
+
+
+
+
+
+
+#duplicate values
+df.count()
+
+
+
+
+
+
+
+
+
+# saving file (csv)
+
+
+
+
+
+#save the dataframe as single csv 
+df.coalesce(1).write.format("csv").option("header","true").save(write_uri)
+
+# parquet
+
+#target location
+parquet_uri='s3://<bucket/dir>/df_parquet'
+
+#save the data into parquet format 
+df.write.format('parquet').save(parquet_uri)
+
+
+
+
+
+
+
+
+
+
