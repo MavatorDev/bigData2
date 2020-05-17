@@ -1,0 +1,54 @@
+%%configure -f
+{ "conf":{
+"spark.pyspark.python": "python3",
+"spark.pyspark.virtualenv.enabled": "true",
+"spark.pyspark.virtualenv.type":"native",
+"spark.pyspark.virtualenv.bin.path":"/usr/bin/virtualenv"
+}}
+sc
+
+
+
+#import SparkSession
+from pyspark.sql import SparkSession
+
+#create spar session object
+spark=SparkSession.builder.appName('data_processing').getOrCreate()
+
+# Load csv Dataset 
+df=spark.read.csv('s3://mavator/datasets/spark/Casos_positivos_de_COVID-19_en_Colombia.csv',inferSchema=True,header=True)
+
+#columns of dataframe
+df.columns
+
+#check number of columns
+len(df.columns)
+
+#number of records in dataframe
+df.count()
+
+#shape of dataset
+print((df.count(),len(df.columns)))
+
+#printSchema
+df.printSchema()
+
+#fisrt few rows of dataframe
+df.show(5)
+
+#select only 2 columns
+df.select('fecha diagnostico','fecha de muerte').show()
+
+#info about dataframe
+df.describe().show()
+
+from pyspark.sql.types import StringType,DoubleType,IntegerType
+
+
+
+
+
+
+
+#filter the records 
+df.filter(df['edad']>'50').show()
