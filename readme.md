@@ -1,1 +1,1 @@
-
+* El proyecto realizado por Manuela Valencia y Andres sanchez se encuentra en el repositorio https://github.com/eafit-201710143010/proyecto-3-Telem-tica. En este consignamos algunas exploraciones e intentos iniciales usando los datasets brindados en las herramientas especificadas.
